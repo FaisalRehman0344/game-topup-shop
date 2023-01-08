@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "513614089942",
+    "project_id": "topup-shop-e27a7",
+    "storage_bucket": "topup-shop-e27a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513614089942:android:47ecc9b8514a7cb9ed8377",
+        "android_client_info": {
+          "package_name": "com.example.topup_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513614089942-dfsi8uvd3f1i8qmim59nffqfsr58pc75.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrWelEz_eqnIC4kqMH9-DQU4P6WnHmjTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513614089942-dfsi8uvd3f1i8qmim59nffqfsr58pc75.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
