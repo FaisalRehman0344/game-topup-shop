@@ -53,10 +53,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_key.currentState!.validate()) {
-                        LoginState.isLogin = true;
-                        context.go(Routes.adming);
+                        if (username == password && password == "03441140754") {
+                          await LoginState.login;
+                          context.go(Routes.adming);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Invalid Credentials")));
+                        }
                       }
                     },
                     child: const Text("Login", style: TextStyle(fontSize: 16)),

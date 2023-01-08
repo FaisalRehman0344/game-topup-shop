@@ -21,6 +21,7 @@ class _AdminScreenState extends State<AdminScreen> {
   FilterVal filter = FilterVal.pending;
   Map<String, dynamic> newOffer = {};
   final _key = GlobalKey<FormState>();
+  bool isLogin = false;
   List<String> inputFields = [
     "Name",
     "Price",
@@ -179,11 +180,13 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    if (mounted) {
-      if (!LoginState.isLogin) {
-        context.go(Routes.home);
-      }
+  void didChangeDependencies() async {
+    isLogin = await LoginState.checkLogin;
+    setState(() {
+      isLogin = isLogin;
+    });
+    if (!isLogin) {
+      context.go(Routes.home);
     }
     super.didChangeDependencies();
   }
@@ -192,7 +195,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: customAppBar(size, context),
+      appBar: customAppBar(size, context, isAdminLogin: isLogin),
       body: StreamBuilder(
           stream: db
               .collection("Orders")

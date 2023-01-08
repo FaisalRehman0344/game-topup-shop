@@ -232,7 +232,7 @@ class _OfferScreenState extends State<OfferScreen> {
                                     ),
                                     title: Text(offer.name),
                                     subtitle: Text(offer.price),
-                                    trailing: LoginState.isLogin
+                                    trailing: LoginState.isLogin != null && LoginState.isLogin!
                                         ? InkWell(
                                             onTap: () async {
                                               setState(() {

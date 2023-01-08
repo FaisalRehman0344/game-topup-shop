@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:topup_shop/models/login_state.dart';
 import 'package:topup_shop/routes/my_routes.dart';
 
-PreferredSize customAppBar(Size size, BuildContext context) {
+PreferredSize customAppBar(Size size, BuildContext context,{bool? isAdminLogin}) {
   return PreferredSize(
       preferredSize: Size(size.width, 55),
       child: Card(
@@ -34,9 +34,9 @@ PreferredSize customAppBar(Size size, BuildContext context) {
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
-                      if (LoginState.isLogin) {
-                        LoginState.isLogin = false;
+                    onPressed: () async {
+                      if ((await LoginState.checkLogin)) {
+                        await LoginState.logout;
                         context.go(Routes.login);
                       } else {
                         context.go(Routes.login);
@@ -44,7 +44,7 @@ PreferredSize customAppBar(Size size, BuildContext context) {
                       
                     },
                     child:
-                        Text(LoginState.isLogin ? 'Logout' : 'Login'),
+                        Text((LoginState.isLogin != null && LoginState.isLogin!) || (isAdminLogin != null && isAdminLogin) ? 'Logout' : 'Login'),
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   ),
