@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SnackBar(content: Text("Invalid Game Id")));
                       } else {
                         Navigator.pop(context);
-                        context.go(Routes.getOffers,
+                        context.go(Routes.offers,
                             extra: {"name": name, "gameId": gameId});
                       }
                     }
@@ -105,6 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           });
         });
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {});
+    super.didChangeDependencies();
   }
 
   @override

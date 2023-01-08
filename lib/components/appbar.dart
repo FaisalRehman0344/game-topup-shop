@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:topup_shop/models/login_state.dart';
 import 'package:topup_shop/routes/my_routes.dart';
-import 'package:topup_shop/screens/login_screen.dart';
 
-PreferredSize customAppBar(Size size, BuildContext context, {bool? isLogin}) {
+PreferredSize customAppBar(Size size, BuildContext context) {
   return PreferredSize(
       preferredSize: Size(size.width, 55),
       child: Card(
@@ -38,14 +37,14 @@ PreferredSize customAppBar(Size size, BuildContext context, {bool? isLogin}) {
                     onPressed: () {
                       if (LoginState.isLogin) {
                         LoginState.isLogin = false;
-                        context.go(Routes.home);
+                        context.go(Routes.login);
                       } else {
-                        context.go(Routes.getLogin);
+                        context.go(Routes.login);
                       }
                       
                     },
                     child:
-                        Text(isLogin != null && isLogin ? 'Logout' : 'Login'),
+                        Text(LoginState.isLogin ? 'Logout' : 'Login'),
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   ),
@@ -56,5 +55,3 @@ PreferredSize customAppBar(Size size, BuildContext context, {bool? isLogin}) {
         ),
       ));
 }
-
-// 

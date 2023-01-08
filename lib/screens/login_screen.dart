@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       if (_key.currentState!.validate()) {
                         LoginState.isLogin = true;
-                        context.go(Routes.getAdmin);
+                        context.go(Routes.adming);
                       }
                     },
                     child: const Text("Login", style: TextStyle(fontSize: 16)),

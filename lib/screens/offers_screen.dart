@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:topup_shop/components/appbar.dart';
 import 'package:topup_shop/components/custom_field.dart';
 import 'package:topup_shop/components/my_carosel.dart';
+import 'package:topup_shop/models/login_state.dart';
 import 'package:topup_shop/models/offer.dart';
 import 'package:topup_shop/models/order.dart' as repo;
 import 'package:topup_shop/routes/my_routes.dart';
@@ -31,6 +32,7 @@ class _OfferScreenState extends State<OfferScreen> {
   Offer? selected;
 
   Future<void> getOffers() async {
+    offers = [];
     setState(() {
       _isLoading = true;
     });
@@ -41,9 +43,9 @@ class _OfferScreenState extends State<OfferScreen> {
         .then((value) => {
               // ignore: avoid_function_literals_in_foreach_calls
               value.docs.forEach((element) {
-                setState(() {
-                  offers.add(Offer.fromJson(element.data()));
-                });
+                Offer offer = Offer.fromJson(element.data());
+                offer.docId = element.id;
+                offers.add(offer);
               }),
               setState(() {
                 _isLoading = false;
@@ -230,6 +232,24 @@ class _OfferScreenState extends State<OfferScreen> {
                                     ),
                                     title: Text(offer.name),
                                     subtitle: Text(offer.price),
+                                    trailing: LoginState.isLogin
+                                        ? InkWell(
+                                            onTap: () async {
+                                              setState(() {
+                                                _isLoading = true;
+                                              });
+                                              await db
+                                                  .collection("Offers")
+                                                  .doc(offer.docId)
+                                                  .delete();
+                                              await getOffers();
+                                            },
+                                            child: const Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.orange,
+                                            ),
+                                          )
+                                        : null,
                                   ),
                                 ),
                               );

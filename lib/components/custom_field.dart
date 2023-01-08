@@ -15,11 +15,7 @@ TextFormField customField(String title, var onChange) {
     onChanged: onChange,
     validator: (value) {
       if (value == null || value.isEmpty) {
-        if (title == "Transaction ID") {
-          return "Please enter transaction ID";
-        } else {
-          return "Please enter contact number";
-        }
+        return "Please enter " + title;
       }
       return null;
     },

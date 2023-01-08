@@ -6,6 +6,7 @@ class Offer {
   final int quantity;
   final OfferType offerType;
   final String description;
+  String? docId;
 
   Offer(
       {required this.name,

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:topup_shop/components/appbar.dart';
-import 'package:topup_shop/main.dart';
 import 'package:topup_shop/models/login_state.dart';
 import 'package:topup_shop/models/offer.dart';
 import 'package:topup_shop/models/order.dart' as my;
@@ -19,6 +19,14 @@ enum FilterVal { pending, approved, canceled }
 
 class _AdminScreenState extends State<AdminScreen> {
   FilterVal filter = FilterVal.pending;
+  Map<String, dynamic> newOffer = {};
+  final _key = GlobalKey<FormState>();
+  List<String> inputFields = [
+    "Name",
+    "Price",
+    "Quantity",
+    "Description",
+  ];
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -87,6 +95,89 @@ class _AdminScreenState extends State<AdminScreen> {
         });
   }
 
+  void onChange(title, val) {
+    if (title == "Name") {
+      newOffer["name"] = val;
+    } else if (title == "Quantity") {
+      newOffer["quantity"] = int.parse(val);
+    } else if (title == "Price") {
+      newOffer["price"] = val + " PKR";
+    } else if (title == "Description") {
+      newOffer["description"] = val;
+    }
+  }
+
+  Future<void> createOffer() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: const Text("Add New Offer"),
+            content: Form(
+              key: _key,
+              child: SizedBox(
+                height: 400,
+                width: 200,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                        itemCount: inputFields.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: customField(inputFields[index],
+                                  (val) => onChange(inputFields[index], val)));
+                        }),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: DropdownButton<OfferType>(
+                          focusColor: Colors.transparent,
+                          underline: Container(),
+                          hint: const Text("Select Offer Type"),
+                          isExpanded: true,
+                          value: newOffer["offerType"] != null
+                              ? OfferType.values.byName(newOffer["offerType"])
+                              : null,
+                          items: OfferType.values
+                              .map((e) => DropdownMenuItem<OfferType>(
+                                  child: Text(e.name.toUpperCase()), value: e))
+                              .toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              newOffer["offerType"] = val!.name;
+                            });
+                          }),
+                    ),
+                    const SizedBox(height: 20),
+                    MaterialButton(
+                      color: Colors.orange,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await db.collection("Offers").doc().set(newOffer);
+                      },
+                      child: const Text("Create Offer"),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 30),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
   @override
   void didChangeDependencies() {
     if (mounted) {
@@ -101,7 +192,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: customAppBar(size, context, isLogin: true),
+      appBar: customAppBar(size, context),
       body: StreamBuilder(
           stream: db
               .collection("Orders")
@@ -150,9 +241,7 @@ class _AdminScreenState extends State<AdminScreen> {
                             textColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
-                            onPressed: () {
-                              
-                            },
+                            onPressed: createOffer,
                             child: const Text("Create Offer"),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 30),
@@ -221,6 +310,33 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
             );
           }),
+    );
+  }
+
+  TextFormField customField(String title, var onChange) {
+    return TextFormField(
+      maxLines: title == "Description" ? 3 : null,
+      keyboardType: TextInputType.number,
+      inputFormatters: title == "Quantity" || title == "Price"
+          ? [FilteringTextInputFormatter.digitsOnly]
+          : null,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.orange),
+            borderRadius: BorderRadius.circular(15)),
+        labelText: title,
+      ),
+      onChanged: onChange,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          if (title == "Transaction ID") {
+            return "Please enter transaction ID";
+          } else {
+            return "Please enter contact number";
+          }
+        }
+        return null;
+      },
     );
   }
 }
