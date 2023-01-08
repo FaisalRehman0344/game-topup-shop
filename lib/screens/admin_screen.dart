@@ -277,6 +277,7 @@ class _AdminScreenState extends State<AdminScreen> {
                           child: DataTable(
                             columns: const [
                               DataColumn(label: Text("Name")),
+                              DataColumn(label: Text("Game ID")),
                               DataColumn(label: Text("Quantity")),
                               DataColumn(label: Text("DateTime")),
                               DataColumn(label: Text("Contact")),
@@ -289,6 +290,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 .where((element) => element.status == filter)
                                 .map((e) => DataRow(cells: [
                                       DataCell(Text(e.name)),
+                                      DataCell(Text(e.gameId)),
                                       DataCell(Text(e.quantity.toString())),
                                       DataCell(Text(
                                           e.dateTime.toLocal().toString())),

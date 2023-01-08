@@ -53,8 +53,11 @@ class _OfferScreenState extends State<OfferScreen> {
             });
   }
 
-  Future<void> submitOrder(GlobalKey<FormState> _key) async {
+  Future<void> submitOrder(GlobalKey<FormState> _key, Size size) async {
     if (_key.currentState!.validate()) {
+      if (size.width <= 850) {
+        Navigator.pop(context);
+      }
       repo.Order order = repo.Order(
         name: selected!.name,
         quantity: selected!.quantity,
@@ -232,7 +235,8 @@ class _OfferScreenState extends State<OfferScreen> {
                                     ),
                                     title: Text(offer.name),
                                     subtitle: Text(offer.price),
-                                    trailing: LoginState.isLogin != null && LoginState.isLogin!
+                                    trailing: LoginState.isLogin != null &&
+                                            LoginState.isLogin!
                                         ? InkWell(
                                             onTap: () async {
                                               setState(() {
@@ -459,7 +463,7 @@ class _OfferScreenState extends State<OfferScreen> {
                 textColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onPressed: () => submitOrder(_key),
+                onPressed: () => submitOrder(_key, size),
                 child: const Text("Confirm Order"),
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 30),

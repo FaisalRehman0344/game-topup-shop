@@ -1,23 +1,22 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 class LoginState {
   static bool? isLogin = false;
+  static SessionManager preferences = SessionManager();
 
   static Future<bool> get checkLogin async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    isLogin = preferences.getBool("login");
-    return Future.value(isLogin);
+    isLogin = await preferences.get("login");
+    
+    return Future.value(isLogin ?? false);
   }
 
   static Future<void> get login async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setBool("login", true);
+    preferences.set("login", true);
     isLogin = true;
   }
 
   static Future<void> get logout async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setBool("login", false);
+    preferences.set("login", false);
     isLogin = false;
   }
 }

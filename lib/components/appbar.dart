@@ -29,25 +29,25 @@ PreferredSize customAppBar(Size size, BuildContext context,{bool? isAdminLogin})
                       ),
                     ),
                   ),
-                  MaterialButton(
-                    color: Colors.orange,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    onPressed: () async {
-                      if ((await LoginState.checkLogin)) {
-                        await LoginState.logout;
-                        context.go(Routes.login);
-                      } else {
-                        context.go(Routes.login);
-                      }
+                  // MaterialButton(
+                  //   color: Colors.orange,
+                  //   textColor: Colors.white,
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(15)),
+                  //   onPressed: () async {
+                  //     if ((await LoginState.checkLogin)) {
+                  //       await LoginState.logout;
+                  //       context.go(Routes.login);
+                  //     } else {
+                  //       context.go(Routes.login);
+                  //     }
                       
-                    },
-                    child:
-                        Text((LoginState.isLogin != null && LoginState.isLogin!) || (isAdminLogin != null && isAdminLogin) ? 'Logout' : 'Login'),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  ),
+                  //   },
+                  //   child:
+                  //       Text((LoginState.isLogin != null && LoginState.isLogin!) || (isAdminLogin != null && isAdminLogin) ? 'Logout' : 'Login'),
+                  //   padding:
+                  //       const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  // ),
                 ],
               ),
             ),
