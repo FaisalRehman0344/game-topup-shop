@@ -39,6 +39,7 @@ class _OfferScreenState extends State<OfferScreen> {
     db
         .collection("Offers")
         .where("offerType", isEqualTo: widget.name)
+        .orderBy("quantity")
         .get()
         .then((value) => {
               // ignore: avoid_function_literals_in_foreach_calls
@@ -200,6 +201,7 @@ class _OfferScreenState extends State<OfferScreen> {
                                 : size.width * .6
                             : size.width * .9,
                         child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: offers.length,
                             shrinkWrap: true,
                             itemBuilder: ((context, index) {
